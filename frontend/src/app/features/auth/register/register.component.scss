@@ -1,0 +1,116 @@
+.auth-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a237e 0%, #283593 50%, #1565c0 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  .auth-card {
+    width: 100%;
+    max-width: 520px;
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 24px;
+
+      .gov-logo {
+        width: 72px;
+        height: 72px;
+        background: #f57f17;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+
+        mat-icon {
+          font-size: 36px;
+          width: 36px;
+          height: 36px;
+          color: #fff;
+        }
+      }
+
+      h1 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+
+      p {
+        font-size: 14px;
+        color: rgba(255,255,255,0.75);
+      }
+    }
+
+    .register-card {
+      border-radius: 12px !important;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important;
+
+      mat-card-content {
+        padding: 32px !important;
+
+        h2 {
+          font-size: 20px;
+          font-weight: 600;
+          color: #1a237e;
+          margin-bottom: 24px;
+          text-align: center;
+        }
+
+        .error-alert {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          background: #ffebee;
+          border: 1px solid #ef9a9a;
+          border-radius: 6px;
+          padding: 10px 14px;
+          margin-bottom: 16px;
+          color: #b71c1c;
+          font-size: 13px;
+
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
+        }
+
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+        }
+
+        .full-width {
+          width: 100%;
+        }
+
+        .submit-btn {
+          width: 100%;
+          padding: 12px;
+          font-size: 15px;
+          font-weight: 600;
+          background: #1a237e !important;
+          margin-top: 8px;
+          height: 48px;
+        }
+
+        .auth-footer {
+          text-align: center;
+          margin-top: 20px;
+          font-size: 14px;
+          color: #616161;
+
+          a {
+            color: #1a237e;
+            font-weight: 600;
+          }
+        }
+      }
+    }
+  }
+}

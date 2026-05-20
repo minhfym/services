@@ -1,0 +1,93 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><mat-icon>account_balance</mat-icon> Tax Collection</h1>
+    <button mat-raised-button color="primary" routerLink="/taxes/new" class="add-btn">
+      <mat-icon>add</mat-icon> Add Tax Record
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="search-bar">
+        <mat-form-field appearance="outline" class="search-field">
+          <mat-label>Search tax records...</mat-label>
+          <input matInput [formControl]="searchControl">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+
+      <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z0">
+          <ng-container matColumnDef="taxpayer_name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Taxpayer</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="taxpayer-name">{{ row.taxpayer_name }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="taxpayer_id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let row"><code>{{ row.taxpayer_id }}</code></td>
+          </ng-container>
+
+          <ng-container matColumnDef="tax_type">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+            <td mat-cell *matCellDef="let row">{{ row.tax_type | titlecase }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="amount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Amount</th>
+            <td mat-cell *matCellDef="let row">
+              <strong class="amount">${{ row.amount | number:'1.2-2' }}</strong>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="due_date">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Due Date</th>
+            <td mat-cell *matCellDef="let row">{{ row.due_date | date:'mediumDate' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="period">
+            <th mat-header-cell *matHeaderCellDef>Period</th>
+            <td mat-cell *matCellDef="let row">{{ row.period }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="status-badge" [class]="row.status">{{ row.status }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let row">
+              <div class="actions-cell">
+                <button mat-icon-button [routerLink]="['/taxes', row.id]" matTooltip="View Details" color="primary">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button [routerLink]="['/taxes', row.id]" matTooltip="Edit" color="accent">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
+              <mat-icon>inbox</mat-icon>
+              <span>No tax records found</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,81 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="gov-logo">
+        <mat-icon>account_balance</mat-icon>
+      </div>
+      <h1>Government Services Portal</h1>
+      <p>Create your citizen account</p>
+    </div>
+
+    <mat-card class="register-card">
+      <mat-card-content>
+        <h2>Create Account</h2>
+
+        <div class="error-alert" *ngIf="errorMessage">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+          <div class="form-row">
+            <mat-form-field appearance="outline">
+              <mat-label>Full Name</mat-label>
+              <input matInput formControlName="name" placeholder="John Doe">
+              <mat-icon matPrefix>person</mat-icon>
+              <mat-error *ngIf="form.get('name')?.hasError('required')">Name is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>National ID</mat-label>
+              <input matInput formControlName="national_id" placeholder="NID-123456">
+              <mat-icon matPrefix>badge</mat-icon>
+              <mat-error *ngIf="form.get('national_id')?.hasError('required')">National ID is required</mat-error>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email Address</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="your@email.com">
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="form.get('email')?.hasError('required')">Email is required</mat-error>
+            <mat-error *ngIf="form.get('email')?.hasError('email')">Invalid email</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phone" placeholder="+1234567890">
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-error *ngIf="form.get('phone')?.hasError('required')">Phone is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+            <mat-icon matPrefix>lock</mat-icon>
+            <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="form.get('password')?.hasError('required')">Password is required</mat-error>
+            <mat-error *ngIf="form.get('password')?.hasError('minlength')">Minimum 8 characters</mat-error>
+          </mat-form-field>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            class="submit-btn"
+            [disabled]="loading"
+          >
+            <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+            <span *ngIf="!loading">Create Account</span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Already have an account? <a routerLink="/login">Sign in</a></p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

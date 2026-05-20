@@ -1,1 +1,138 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$primary-palette: mat.m2-define-palette(mat.$m2-indigo-palette, 900);
+$accent-palette: mat.m2-define-palette(mat.$m2-amber-palette, 800);
+$warn-palette: mat.m2-define-palette(mat.$m2-red-palette, 900);
+
+$theme: mat.m2-define-light-theme((
+  color: (
+    primary: $primary-palette,
+    accent: $accent-palette,
+    warn: $warn-palette,
+  ),
+  typography: mat.m2-define-typography-config(),
+  density: 0,
+));
+
+@include mat.all-component-themes($theme);
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #212121;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.pending    { background: #fff3e0; color: #e65100; }
+  &.approved   { background: #e8f5e9; color: #2e7d32; }
+  &.active     { background: #e8f5e9; color: #2e7d32; }
+  &.paid       { background: #e8f5e9; color: #2e7d32; }
+  &.registered { background: #e8f5e9; color: #2e7d32; }
+  &.verified   { background: #e8f5e9; color: #2e7d32; }
+  &.rejected   { background: #ffebee; color: #b71c1c; }
+  &.overdue    { background: #ffebee; color: #b71c1c; }
+  &.expired    { background: #ffebee; color: #b71c1c; }
+  &.under_review { background: #e3f2fd; color: #1565c0; }
+  &.open       { background: #e3f2fd; color: #1565c0; }
+  &.hearing    { background: #f3e5f5; color: #6a1b9a; }
+  &.closed     { background: #f5f5f5; color: #616161; }
+  &.waived     { background: #f5f5f5; color: #616161; }
+  &.transferred{ background: #f5f5f5; color: #616161; }
+  &.disputed   { background: #ffebee; color: #b71c1c; }
+  &.draft      { background: #f5f5f5; color: #616161; }
+  &.appealed   { background: #fff8e1; color: #f57f17; }
+
+  &.low    { background: #e8f5e9; color: #2e7d32; }
+  &.medium { background: #fff3e0; color: #e65100; }
+  &.high   { background: #ffebee; color: #b71c1c; }
+  &.urgent { background: #b71c1c; color: #fff; }
+}
+
+.mat-mdc-table {
+  width: 100%;
+  background: #fff !important;
+}
+
+.page-container {
+  padding: 24px;
+  max-width: 1400px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #1a237e;
+  }
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  background: #fff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+.mat-mdc-snack-bar-container {
+  &.success-snack .mdc-snackbar__surface { background: #2e7d32 !important; }
+  &.error-snack .mdc-snackbar__surface { background: #b71c1c !important; }
+}

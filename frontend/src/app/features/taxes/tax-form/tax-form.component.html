@@ -1,0 +1,86 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>
+      <button mat-icon-button routerLink="/taxes"><mat-icon>arrow_back</mat-icon></button>
+      {{ isEdit ? 'Edit Tax Record' : 'New Tax Record' }}
+    </h1>
+  </div>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="loading && isEdit"></mat-progress-bar>
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>account_balance</mat-icon>
+        Tax Information
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Taxpayer Name</mat-label>
+            <input matInput formControlName="taxpayer_name" placeholder="Full name">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="form.get('taxpayer_name')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Taxpayer ID</mat-label>
+            <input matInput formControlName="taxpayer_id" placeholder="TIN-123456">
+            <mat-icon matPrefix>badge</mat-icon>
+            <mat-error *ngIf="form.get('taxpayer_id')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Tax Type</mat-label>
+            <mat-select formControlName="tax_type">
+              <mat-option *ngFor="let type of taxTypes" [value]="type">{{ type | titlecase }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.get('tax_type')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Amount ($)</mat-label>
+            <input matInput type="number" formControlName="amount" placeholder="0.00">
+            <mat-icon matPrefix>attach_money</mat-icon>
+            <mat-error *ngIf="form.get('amount')?.hasError('required')">Required</mat-error>
+            <mat-error *ngIf="form.get('amount')?.hasError('min')">Must be positive</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Due Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="due_date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="form.get('due_date')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tax Period</mat-label>
+            <input matInput formControlName="period" placeholder="e.g. Q1 2026">
+            <mat-icon matPrefix>calendar_today</mat-icon>
+            <mat-error *ngIf="form.get('period')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Notes</mat-label>
+          <textarea matInput formControlName="notes" rows="3" placeholder="Additional notes..."></textarea>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" routerLink="/taxes">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-icon>save</mat-icon>
+            {{ isEdit ? 'Update' : 'Create' }} Tax Record
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
