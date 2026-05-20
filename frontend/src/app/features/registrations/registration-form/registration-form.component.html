@@ -1,0 +1,91 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><button mat-icon-button routerLink="/registrations"><mat-icon>arrow_back</mat-icon></button>
+    {{ isEdit ? 'Edit Registration' : 'New Registration' }}</h1>
+  </div>
+  <mat-card>
+    <mat-card-header><mat-card-title><mat-icon>how_to_reg</mat-icon> Personal Information</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="full_name">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="form.get('full_name')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>National ID</mat-label>
+            <input matInput formControlName="national_id">
+            <mat-icon matPrefix>badge</mat-icon>
+            <mat-error *ngIf="form.get('national_id')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Date of Birth</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date_of_birth">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="form.get('date_of_birth')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option *ngFor="let g of genders" [value]="g">{{ g | titlecase }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Phone Number</mat-label>
+            <input matInput formControlName="phone">
+            <mat-icon matPrefix>phone</mat-icon>
+            <mat-error *ngIf="form.get('phone')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Email (optional)</mat-label>
+            <input matInput type="email" formControlName="email">
+            <mat-icon matPrefix>email</mat-icon>
+            <mat-error *ngIf="form.get('email')?.hasError('email')">Invalid email</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Address</mat-label>
+            <input matInput formControlName="address">
+            <mat-icon matPrefix>home</mat-icon>
+            <mat-error *ngIf="form.get('address')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>District</mat-label>
+            <input matInput formControlName="district">
+            <mat-error *ngIf="form.get('district')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Registration Type</mat-label>
+          <mat-select formControlName="registration_type">
+            <mat-option *ngFor="let t of registrationTypes" [value]="t">{{ t | titlecase }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Notes</mat-label>
+          <textarea matInput formControlName="notes" rows="2"></textarea>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" routerLink="/registrations">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-icon>save</mat-icon> {{ isEdit ? 'Update' : 'Submit' }} Registration
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

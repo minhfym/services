@@ -1,0 +1,56 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><button mat-icon-button routerLink="/registrations"><mat-icon>arrow_back</mat-icon></button> Registration Details</h1>
+    <div class="actions" *ngIf="registration && isOfficer && (registration.status === 'pending' || registration.status === 'verified')">
+      <button mat-raised-button color="primary" (click)="approve()"><mat-icon>check_circle</mat-icon> Approve</button>
+      <button mat-raised-button color="warn" (click)="reject()"><mat-icon>cancel</mat-icon> Reject</button>
+    </div>
+  </div>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+  <ng-container *ngIf="registration">
+    <div class="detail-grid">
+      <mat-card class="detail-card">
+        <mat-card-header>
+          <div class="card-title-row">
+            <mat-card-title>Personal Information</mat-card-title>
+            <span class="status-badge" [class]="registration.status">{{ registration.status | titlecase }}</span>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="detail-row"><span class="label">Reg. No.</span><span class="value"><code>{{ registration.registration_number }}</code></span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Full Name</span><span class="value">{{ registration.full_name }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">National ID</span><span class="value"><code>{{ registration.national_id }}</code></span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Date of Birth</span><span class="value">{{ registration.date_of_birth | date:'longDate' }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Gender</span><span class="value">{{ registration.gender | titlecase }}</span></div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="detail-card">
+        <mat-card-header><mat-card-title>Contact & Location</mat-card-title></mat-card-header>
+        <mat-card-content>
+          <div class="detail-row"><span class="label">Phone</span><span class="value">{{ registration.phone }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Email</span><span class="value">{{ registration.email || 'N/A' }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Address</span><span class="value">{{ registration.address }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">District</span><span class="value">{{ registration.district }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Reg. Type</span><span class="value">{{ registration.registration_type | titlecase }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Submitted</span><span class="value">{{ registration.submitted_at | date:'medium' }}</span></div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <mat-card *ngIf="registration.notes">
+      <mat-card-header><mat-card-title>Notes</mat-card-title></mat-card-header>
+      <mat-card-content><p>{{ registration.notes }}</p></mat-card-content>
+    </mat-card>
+  </ng-container>
+</div>

@@ -1,0 +1,6 @@
+.page-header { margin-bottom: 20px; h1 { display: flex; align-items: center; gap: 8px; font-size: 22px; font-weight: 700; color: #1a237e; } }
+mat-card-header mat-card-title { display: flex; align-items: center; gap: 8px; color: #1a237e; mat-icon { color: #f57f17; } }
+mat-card-content { padding-top: 16px !important; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 8px; @media (max-width: 600px) { grid-template-columns: 1fr; } }
+.full-width { width: 100%; margin-bottom: 8px; }
+.form-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px; padding-top: 16px; border-top: 1px solid #f0f0f0; }

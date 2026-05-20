@@ -1,0 +1,97 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><button mat-icon-button routerLink="/cases"><mat-icon>arrow_back</mat-icon></button>
+    {{ isEdit ? 'Edit Case' : 'File New Case' }}</h1>
+  </div>
+  <mat-card>
+    <mat-card-header><mat-card-title><mat-icon>gavel</mat-icon> Case Information</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Case Title</mat-label>
+          <input matInput formControlName="title">
+          <mat-error *ngIf="form.get('title')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Case Type</mat-label>
+            <mat-select formControlName="case_type">
+              <mat-option *ngFor="let t of caseTypes" [value]="t">{{ t | titlecase }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Priority</mat-label>
+            <mat-select formControlName="priority">
+              <mat-option *ngFor="let p of priorities" [value]="p">{{ p | titlecase }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="section-label">Plaintiff</div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Plaintiff Name</mat-label>
+            <input matInput formControlName="plaintiff_name">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="form.get('plaintiff_name')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Plaintiff ID (optional)</mat-label>
+            <input matInput formControlName="plaintiff_id">
+            <mat-icon matPrefix>badge</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="section-label">Defendant</div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Defendant Name</mat-label>
+            <input matInput formControlName="defendant_name">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="form.get('defendant_name')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Defendant ID (optional)</mat-label>
+            <input matInput formControlName="defendant_id">
+            <mat-icon matPrefix>badge</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Filed Date</mat-label>
+            <input matInput [matDatepicker]="filedPicker" formControlName="filed_date">
+            <mat-datepicker-toggle matSuffix [for]="filedPicker"></mat-datepicker-toggle>
+            <mat-datepicker #filedPicker></mat-datepicker>
+            <mat-error *ngIf="form.get('filed_date')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Hearing Date (optional)</mat-label>
+            <input matInput [matDatepicker]="hearingPicker" formControlName="hearing_date">
+            <mat-datepicker-toggle matSuffix [for]="hearingPicker"></mat-datepicker-toggle>
+            <mat-datepicker #hearingPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Description</mat-label>
+          <textarea matInput formControlName="description" rows="4"></textarea>
+          <mat-error *ngIf="form.get('description')?.hasError('required')">Required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Notes</mat-label>
+          <textarea matInput formControlName="notes" rows="2"></textarea>
+        </mat-form-field>
+
+        <div class="form-actions">
+          <button mat-stroked-button type="button" routerLink="/cases">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-icon>save</mat-icon> {{ isEdit ? 'Update' : 'File' }} Case
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

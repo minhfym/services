@@ -1,0 +1,44 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><button mat-icon-button routerLink="/grants"><mat-icon>arrow_back</mat-icon></button> Grant Details</h1>
+    <div class="actions" *ngIf="grant">
+      <button mat-stroked-button [routerLink]="['/grants', grant.id, 'edit']"><mat-icon>edit</mat-icon> Edit</button>
+      <button mat-raised-button color="primary" routerLink="/grant-applications"><mat-icon>assignment_turned_in</mat-icon> View Applications</button>
+    </div>
+  </div>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+  <ng-container *ngIf="grant">
+    <div class="detail-grid">
+      <mat-card class="detail-card">
+        <mat-card-header>
+          <div class="card-title-row">
+            <mat-card-title>{{ grant.title }}</mat-card-title>
+            <span class="status-badge" [class]="grant.status">{{ grant.status | titlecase }}</span>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="detail-row"><span class="label">Type</span><span class="value">{{ grant.grant_type | titlecase }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Total Amount</span><span class="value amount">${{ grant.total_amount | number:'1.0-0' }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Available</span><span class="value available">${{ grant.available_amount | number:'1.0-0' }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Deadline</span><span class="value">{{ grant.deadline | date:'longDate' }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Created</span><span class="value">{{ grant.created_at | date:'medium' }}</span></div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="detail-card">
+        <mat-card-header><mat-card-title>Description</mat-card-title></mat-card-header>
+        <mat-card-content><p class="description-text">{{ grant.description }}</p></mat-card-content>
+      </mat-card>
+    </div>
+
+    <mat-card class="eligibility-card">
+      <mat-card-header><mat-card-title>Eligibility Criteria</mat-card-title></mat-card-header>
+      <mat-card-content><p>{{ grant.eligibility_criteria }}</p></mat-card-content>
+    </mat-card>
+  </ng-container>
+</div>

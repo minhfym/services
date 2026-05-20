@@ -1,0 +1,50 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><button mat-icon-button routerLink="/lands"><mat-icon>arrow_back</mat-icon></button> Land Parcel Details</h1>
+    <div class="actions" *ngIf="land && isOfficer && land.status === 'pending'">
+      <button mat-raised-button color="primary" (click)="approve()"><mat-icon>check_circle</mat-icon> Approve</button>
+    </div>
+  </div>
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+  <ng-container *ngIf="land">
+    <div class="detail-grid">
+      <mat-card class="detail-card">
+        <mat-card-header>
+          <div class="card-title-row">
+            <mat-card-title>Parcel Information</mat-card-title>
+            <span class="status-badge" [class]="land.status">{{ land.status | titlecase }}</span>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="detail-row"><span class="label">Parcel No.</span><span class="value"><code>{{ land.parcel_number }}</code></span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Owner</span><span class="value">{{ land.owner_name }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Owner ID</span><span class="value">{{ land.owner_id }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Land Use</span><span class="value">{{ land.land_use | titlecase }}</span></div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="detail-card">
+        <mat-card-header><mat-card-title>Location & Valuation</mat-card-title></mat-card-header>
+        <mat-card-content>
+          <div class="detail-row"><span class="label">Location</span><span class="value">{{ land.location }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">District</span><span class="value">{{ land.district }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Area</span><span class="value">{{ land.area_sqm | number }} m²</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Valuation</span><span class="value">{{ land.valuation ? ('$' + (land.valuation | number:'1.0-0')) : 'N/A' }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Reg. Date</span><span class="value">{{ land.registration_date | date:'longDate' }}</span></div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <mat-card *ngIf="land.notes">
+      <mat-card-header><mat-card-title>Notes</mat-card-title></mat-card-header>
+      <mat-card-content><p>{{ land.notes }}</p></mat-card-content>
+    </mat-card>
+  </ng-container>
+</div>

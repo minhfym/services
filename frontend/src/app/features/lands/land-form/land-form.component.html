@@ -1,0 +1,87 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1><button mat-icon-button routerLink="/lands"><mat-icon>arrow_back</mat-icon></button>
+    {{ isEdit ? 'Edit Land Record' : 'Register Land Parcel' }}</h1>
+  </div>
+
+  <mat-card>
+    <mat-card-header><mat-card-title><mat-icon>map</mat-icon> Land Information</mat-card-title></mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Parcel Number</mat-label>
+            <input matInput formControlName="parcel_number" placeholder="LND-2026-001">
+            <mat-icon matPrefix>tag</mat-icon>
+            <mat-error *ngIf="form.get('parcel_number')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Land Use</mat-label>
+            <mat-select formControlName="land_use">
+              <mat-option *ngFor="let u of landUses" [value]="u">{{ u | titlecase }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Owner Name</mat-label>
+            <input matInput formControlName="owner_name">
+            <mat-icon matPrefix>person</mat-icon>
+            <mat-error *ngIf="form.get('owner_name')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Owner ID</mat-label>
+            <input matInput formControlName="owner_id">
+            <mat-icon matPrefix>badge</mat-icon>
+            <mat-error *ngIf="form.get('owner_id')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Location</mat-label>
+            <input matInput formControlName="location" placeholder="Physical address">
+            <mat-icon matPrefix>location_on</mat-icon>
+            <mat-error *ngIf="form.get('location')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>District</mat-label>
+            <input matInput formControlName="district">
+            <mat-error *ngIf="form.get('district')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Area (m²)</mat-label>
+            <input matInput type="number" formControlName="area_sqm">
+            <mat-icon matSuffix>square_foot</mat-icon>
+            <mat-error *ngIf="form.get('area_sqm')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Valuation ($)</mat-label>
+            <input matInput type="number" formControlName="valuation">
+            <mat-icon matPrefix>attach_money</mat-icon>
+          </mat-form-field>
+        </div>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Registration Date</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="registration_date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="form.get('registration_date')?.hasError('required')">Required</mat-error>
+          </mat-form-field>
+        </div>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Notes</mat-label>
+          <textarea matInput formControlName="notes" rows="2"></textarea>
+        </mat-form-field>
+        <div class="form-actions">
+          <button mat-stroked-button type="button" routerLink="/lands">Cancel</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">
+            <mat-icon>save</mat-icon> {{ isEdit ? 'Update' : 'Register' }} Land
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
