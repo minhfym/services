@@ -62,6 +62,11 @@ export class AuthService {
     return user?.role === 'officer' || user?.role === 'admin';
   }
 
+  isCitizen(): boolean {
+    const user = this.getCurrentUser();
+    return user?.role === 'citizen';
+  }
+
   clearSession(): void {
     localStorage.removeItem(this.tokenKey);
     localStorage.removeItem(this.userKey);

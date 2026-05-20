@@ -9,6 +9,11 @@
     </div>
   </div>
 
+  <div class="role-banner" *ngIf="currentUser" [style.background]="getRoleColor()">
+    <mat-icon class="role-icon">{{ isCitizen ? 'person' : (isOfficer ? 'badge' : 'admin_panel_settings') }}</mat-icon>
+    <span>{{ getRoleLabel() }}</span>
+  </div>
+
   <nav class="sidebar-nav">
     <a
       *ngFor="let item of navItems"
@@ -28,7 +33,7 @@
       <div class="avatar">{{ getInitials(currentUser.name) }}</div>
       <div class="user-details">
         <span class="user-name">{{ currentUser.name }}</span>
-        <span class="user-role">{{ currentUser.role | titlecase }}</span>
+        <span class="user-role" [style.color]="getRoleColor()">{{ getRoleLabel() }}</span>
       </div>
     </div>
     <button class="logout-btn" (click)="logout()">

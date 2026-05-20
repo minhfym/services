@@ -10,7 +10,7 @@ interface NavItem {
   label: string;
   icon: string;
   route: string;
-  adminOnly?: boolean;
+  badge?: string;
 }
 
 @Component({
@@ -24,9 +24,10 @@ export class SidebarComponent implements OnInit {
   @Output() sidenavClose = new EventEmitter<void>();
 
   currentUser: User | null = null;
-  isAdmin = false;
+  isOfficer = false;
+  isCitizen = false;
 
-  navItems: NavItem[] = [
+  officerNavItems: NavItem[] = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
     { label: 'Tax Collection', icon: 'account_balance', route: '/taxes' },
     { label: 'E-Permits', icon: 'assignment', route: '/permits' },
@@ -37,11 +38,27 @@ export class SidebarComponent implements OnInit {
     { label: 'Registrations', icon: 'how_to_reg', route: '/registrations' },
   ];
 
+  citizenNavItems: NavItem[] = [
+    { label: 'My Dashboard', icon: 'dashboard', route: '/dashboard' },
+    { label: 'My Taxes', icon: 'receipt_long', route: '/taxes' },
+    { label: 'My Permits', icon: 'approval', route: '/permits' },
+    { label: 'My Land', icon: 'terrain', route: '/lands' },
+    { label: 'Available Grants', icon: 'volunteer_activism', route: '/grants' },
+    { label: 'My Applications', icon: 'fact_check', route: '/grant-applications' },
+    { label: 'My Cases', icon: 'balance', route: '/cases' },
+    { label: 'My Registrations', icon: 'badge', route: '/registrations' },
+  ];
+
+  get navItems(): NavItem[] {
+    return this.isCitizen ? this.citizenNavItems : this.officerNavItems;
+  }
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
-    this.isAdmin = this.authService.isAdmin();
+    this.isOfficer = this.authService.isOfficer();
+    this.isCitizen = this.authService.isCitizen();
   }
 
   logout(): void {
@@ -56,5 +73,25 @@ export class SidebarComponent implements OnInit {
 
   getInitials(name: string): string {
     return name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+  }
+
+  getRoleLabel(): string {
+    if (!this.currentUser) return '';
+    const labels: Record<string, string> = {
+      admin: 'Administrator',
+      officer: 'Government Officer',
+      citizen: 'Citizen'
+    };
+    return labels[this.currentUser.role] || this.currentUser.role;
+  }
+
+  getRoleColor(): string {
+    if (!this.currentUser) return '#888';
+    const colors: Record<string, string> = {
+      admin: '#b71c1c',
+      officer: '#1565c0',
+      citizen: '#2e7d32'
+    };
+    return colors[this.currentUser.role] || '#888';
   }
 }

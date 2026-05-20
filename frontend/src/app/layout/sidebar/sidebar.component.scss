@@ -163,3 +163,21 @@
     }
   }
 }
+
+.role-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+
+  .role-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+  }
+}
