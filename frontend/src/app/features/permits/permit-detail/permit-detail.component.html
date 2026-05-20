@@ -1,0 +1,65 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>
+      <button mat-icon-button routerLink="/permits"><mat-icon>arrow_back</mat-icon></button>
+      Permit Details
+    </h1>
+    <div class="actions" *ngIf="permit && isOfficer">
+      <button mat-raised-button color="primary" *ngIf="permit.status === 'pending' || permit.status === 'under_review'" (click)="approve()">
+        <mat-icon>check_circle</mat-icon> Approve
+      </button>
+      <button mat-raised-button color="warn" *ngIf="permit.status === 'pending' || permit.status === 'under_review'" (click)="reject()">
+        <mat-icon>cancel</mat-icon> Reject
+      </button>
+    </div>
+  </div>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+
+  <ng-container *ngIf="permit">
+    <div class="detail-grid">
+      <mat-card class="detail-card">
+        <mat-card-header>
+          <div class="card-title-row">
+            <mat-card-title>Applicant Information</mat-card-title>
+            <span class="status-badge" [class]="permit.status">{{ permit.status | titlecase }}</span>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="detail-row"><span class="label">Applicant Name</span><span class="value">{{ permit.applicant_name }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Applicant ID</span><span class="value"><code>{{ permit.applicant_id }}</code></span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Permit Type</span><span class="value">{{ permit.permit_type | titlecase }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Location</span><span class="value">{{ permit.location }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Fee</span><span class="value amount">${{ permit.fee | number:'1.2-2' }}</span></div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="detail-card">
+        <mat-card-header><mat-card-title>Permit Dates</mat-card-title></mat-card-header>
+        <mat-card-content>
+          <div class="detail-row"><span class="label">Submitted</span><span class="value">{{ permit.created_at | date:'medium' }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Issue Date</span><span class="value">{{ permit.issue_date ? (permit.issue_date | date:'longDate') : 'Not issued' }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Expiry Date</span><span class="value">{{ permit.expiry_date ? (permit.expiry_date | date:'longDate') : 'N/A' }}</span></div>
+          <mat-divider></mat-divider>
+          <div class="detail-row"><span class="label">Last Updated</span><span class="value">{{ permit.updated_at | date:'medium' }}</span></div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <mat-card class="notes-card">
+      <mat-card-header><mat-card-title>Description</mat-card-title></mat-card-header>
+      <mat-card-content><p>{{ permit.description }}</p></mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="permit.notes" class="notes-card">
+      <mat-card-header><mat-card-title>Notes</mat-card-title></mat-card-header>
+      <mat-card-content><p>{{ permit.notes }}</p></mat-card-content>
+    </mat-card>
+  </ng-container>
+</div>
