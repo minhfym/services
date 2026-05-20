@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { LandService } from '../../../core/services/land.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Land } from '../../../core/models/land.model';
 
 @Component({
@@ -31,14 +32,25 @@ export class LandListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns = ['parcel_number', 'owner_name', 'location', 'district', 'area_sqm', 'land_use', 'status', 'actions'];
+  isOfficer = false;
+  isCitizen = false;
+
+  officerColumns = ['parcel_number', 'owner_name', 'location', 'district', 'area_sqm', 'land_use', 'status', 'actions'];
+  citizenColumns = ['parcel_number', 'location', 'area_sqm', 'land_use', 'status', 'actions'];
+
+  get displayedColumns() {
+    return this.isCitizen ? this.citizenColumns : this.officerColumns;
+  }
+
   dataSource = new MatTableDataSource<Land>([]);
   searchControl = new FormControl('');
   loading = true;
 
-  constructor(private landService: LandService) {}
+  constructor(private landService: LandService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isOfficer = this.authService.isOfficer();
+    this.isCitizen = this.authService.isCitizen();
     this.loadData();
     this.searchControl.valueChanges.subscribe(val => {
       this.dataSource.filter = (val || '').trim().toLowerCase();
@@ -49,7 +61,7 @@ export class LandListComponent implements OnInit {
     this.loading = true;
     this.landService.getAll().subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+        this.dataSource.data = Array.isArray(data) ? data : (data as any).data || [];
         setTimeout(() => {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;

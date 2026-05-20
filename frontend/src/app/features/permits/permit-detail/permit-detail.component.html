@@ -4,14 +4,32 @@
       <button mat-icon-button routerLink="/permits"><mat-icon>arrow_back</mat-icon></button>
       Permit Details
     </h1>
-    <div class="actions" *ngIf="permit && isOfficer">
-      <button mat-raised-button color="primary" *ngIf="permit.status === 'pending' || permit.status === 'under_review'" (click)="approve()">
-        <mat-icon>check_circle</mat-icon> Approve
-      </button>
-      <button mat-raised-button color="warn" *ngIf="permit.status === 'pending' || permit.status === 'under_review'" (click)="reject()">
-        <mat-icon>cancel</mat-icon> Reject
-      </button>
+    <div class="actions" *ngIf="permit">
+      <!-- Officer actions -->
+      <ng-container *ngIf="isOfficer">
+        <button mat-raised-button color="primary" *ngIf="permit.status === 'pending' || permit.status === 'under_review'" (click)="approve()">
+          <mat-icon>check_circle</mat-icon> Approve
+        </button>
+        <button mat-raised-button color="warn" *ngIf="permit.status === 'pending' || permit.status === 'under_review'" (click)="reject()">
+          <mat-icon>cancel</mat-icon> Reject
+        </button>
+      </ng-container>
+      <!-- Citizen actions -->
+      <ng-container *ngIf="isCitizen">
+        <button mat-raised-button color="primary" *ngIf="permit.status === 'approved'">
+          <mat-icon>download</mat-icon> Download Permit
+        </button>
+        <button mat-raised-button color="warn" *ngIf="permit.status === 'rejected'" routerLink="/permits/new">
+          <mat-icon>refresh</mat-icon> Resubmit Application
+        </button>
+      </ng-container>
     </div>
+  </div>
+
+  <!-- Citizen: under review info banner -->
+  <div class="info-banner" *ngIf="isCitizen && permit && permit.status === 'under_review'">
+    <mat-icon>hourglass_empty</mat-icon>
+    <span>Your application is currently under review by an officer. You will be notified once a decision is made.</span>
   </div>
 
   <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
@@ -28,8 +46,8 @@
         <mat-card-content>
           <div class="detail-row"><span class="label">Applicant Name</span><span class="value">{{ permit.applicant_name }}</span></div>
           <mat-divider></mat-divider>
-          <div class="detail-row"><span class="label">Applicant ID</span><span class="value"><code>{{ permit.applicant_id }}</code></span></div>
-          <mat-divider></mat-divider>
+          <div class="detail-row" *ngIf="isOfficer"><span class="label">Applicant ID</span><span class="value"><code>{{ permit.applicant_id }}</code></span></div>
+          <mat-divider *ngIf="isOfficer"></mat-divider>
           <div class="detail-row"><span class="label">Permit Type</span><span class="value">{{ permit.permit_type | titlecase }}</span></div>
           <mat-divider></mat-divider>
           <div class="detail-row"><span class="label">Location</span><span class="value">{{ permit.location }}</span></div>

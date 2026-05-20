@@ -1,60 +1,88 @@
 <div class="page-container">
   <div class="page-header">
-    <h1><mat-icon>how_to_reg</mat-icon> Citizen Registrations</h1>
+    <div class="header-left">
+      <mat-icon>{{ isCitizen ? 'badge' : 'how_to_reg' }}</mat-icon>
+      <div>
+        <h1>{{ isCitizen ? 'My Registrations' : 'Citizen Registrations' }}</h1>
+        <p class="header-subtitle">{{ isCitizen ? 'Track your registration submissions and status' : 'Review and process citizen registrations' }}</p>
+      </div>
+    </div>
     <button mat-raised-button color="primary" routerLink="/registrations/new" class="add-btn">
-      <mat-icon>add</mat-icon> New Registration
+      <mat-icon>add</mat-icon>
+      {{ isCitizen ? 'New Registration' : 'Register Citizen' }}
     </button>
   </div>
+
   <mat-card>
     <mat-card-content>
       <div class="search-bar">
         <mat-form-field appearance="outline" class="search-field">
-          <mat-label>Search registrations...</mat-label>
+          <mat-label>{{ isCitizen ? 'Search my registrations...' : 'Search registrations...' }}</mat-label>
           <input matInput [formControl]="searchControl"><mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
       </div>
       <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
       <div class="table-container">
         <table mat-table [dataSource]="dataSource" matSort>
+
           <ng-container matColumnDef="registration_number">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Reg. No.</th>
             <td mat-cell *matCellDef="let row"><code>{{ row.registration_number }}</code></td>
           </ng-container>
+
           <ng-container matColumnDef="full_name">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Full Name</th>
             <td mat-cell *matCellDef="let row"><strong>{{ row.full_name }}</strong></td>
           </ng-container>
+
           <ng-container matColumnDef="national_id">
             <th mat-header-cell *matHeaderCellDef>National ID</th>
             <td mat-cell *matCellDef="let row"><code>{{ row.national_id }}</code></td>
           </ng-container>
+
           <ng-container matColumnDef="registration_type">
             <th mat-header-cell *matHeaderCellDef>Type</th>
             <td mat-cell *matCellDef="let row">{{ row.registration_type | titlecase }}</td>
           </ng-container>
-          <ng-container matColumnDef="district">
-            <th mat-header-cell *matHeaderCellDef>District</th>
-            <td mat-cell *matCellDef="let row">{{ row.district }}</td>
-          </ng-container>
+
           <ng-container matColumnDef="submitted_at">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Submitted</th>
             <td mat-cell *matCellDef="let row">{{ row.submitted_at | date:'mediumDate' }}</td>
           </ng-container>
+
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-            <td mat-cell *matCellDef="let row"><span class="status-badge" [class]="row.status">{{ row.status | titlecase }}</span></td>
+            <td mat-cell *matCellDef="let row">
+              <span class="status-badge" [class]="row.status">{{ row.status | titlecase }}</span>
+            </td>
           </ng-container>
+
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let row">
-              <button mat-icon-button [routerLink]="['/registrations', row.id]" matTooltip="View" color="primary"><mat-icon>visibility</mat-icon></button>
+              <div class="actions-cell">
+                <button mat-icon-button [routerLink]="['/registrations', row.id]" matTooltip="View" color="primary">
+                  <mat-icon>visibility</mat-icon>
+                </button>
+                <!-- Officer: Verify and Approve -->
+                <button *ngIf="isOfficer && row.status === 'pending'"
+                  mat-icon-button matTooltip="Verify" style="color: #1565c0">
+                  <mat-icon>fact_check</mat-icon>
+                </button>
+                <button *ngIf="isOfficer && (row.status === 'pending' || row.status === 'verified')"
+                  mat-icon-button matTooltip="Approve" style="color: #2e7d32">
+                  <mat-icon>check_circle</mat-icon>
+                </button>
+              </div>
             </td>
           </ng-container>
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
           <tr class="mat-row" *matNoDataRow>
             <td class="mat-cell no-data" [attr.colspan]="displayedColumns.length">
-              <mat-icon>inbox</mat-icon><span>No registrations found</span>
+              <mat-icon>inbox</mat-icon>
+              <span>{{ isCitizen ? 'No registrations found for your account' : 'No registrations found' }}</span>
             </td>
           </tr>
         </table>

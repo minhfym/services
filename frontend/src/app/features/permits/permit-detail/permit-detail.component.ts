@@ -27,6 +27,7 @@ export class PermitDetailComponent implements OnInit {
   permit: Permit | null = null;
   loading = true;
   isOfficer = false;
+  isCitizen = false;
 
   constructor(
     private permitService: PermitService,
@@ -38,6 +39,7 @@ export class PermitDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.isOfficer = this.authService.isOfficer();
+    this.isCitizen = this.authService.isCitizen();
     const id = this.route.snapshot.paramMap.get('id');
     if (id) this.loadPermit(+id);
   }

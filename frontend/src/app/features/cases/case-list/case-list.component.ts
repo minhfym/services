@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { CaseService } from '../../../core/services/case.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Case } from '../../../core/models/case.model';
 
 @Component({
@@ -31,14 +32,25 @@ export class CaseListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns = ['case_number', 'title', 'case_type', 'plaintiff_name', 'defendant_name', 'priority', 'status', 'actions'];
+  isOfficer = false;
+  isCitizen = false;
+
+  officerColumns = ['case_number', 'title', 'case_type', 'plaintiff_name', 'defendant_name', 'filed_date', 'status', 'priority', 'actions'];
+  citizenColumns = ['case_number', 'title', 'case_type', 'filed_date', 'hearing_date', 'status', 'actions'];
+
+  get displayedColumns() {
+    return this.isCitizen ? this.citizenColumns : this.officerColumns;
+  }
+
   dataSource = new MatTableDataSource<Case>([]);
   searchControl = new FormControl('');
   loading = true;
 
-  constructor(private caseService: CaseService) {}
+  constructor(private caseService: CaseService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isOfficer = this.authService.isOfficer();
+    this.isCitizen = this.authService.isCitizen();
     this.loadData();
     this.searchControl.valueChanges.subscribe(val => {
       this.dataSource.filter = (val || '').trim().toLowerCase();
@@ -49,7 +61,7 @@ export class CaseListComponent implements OnInit {
     this.loading = true;
     this.caseService.getAll().subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+        this.dataSource.data = Array.isArray(data) ? data : (data as any).data || [];
         setTimeout(() => {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;

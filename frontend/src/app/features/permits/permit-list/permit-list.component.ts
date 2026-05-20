@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { PermitService } from '../../../core/services/permit.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Permit } from '../../../core/models/permit.model';
 
 @Component({
@@ -31,14 +32,25 @@ export class PermitListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns = ['applicant_name', 'permit_type', 'location', 'fee', 'issue_date', 'expiry_date', 'status', 'actions'];
+  isOfficer = false;
+  isCitizen = false;
+
+  officerColumns = ['permit_number', 'applicant_name', 'permit_type', 'location', 'fee', 'expiry_date', 'status', 'actions'];
+  citizenColumns = ['permit_type', 'description', 'location', 'fee', 'status', 'actions'];
+
+  get displayedColumns() {
+    return this.isCitizen ? this.citizenColumns : this.officerColumns;
+  }
+
   dataSource = new MatTableDataSource<Permit>([]);
   searchControl = new FormControl('');
   loading = true;
 
-  constructor(private permitService: PermitService) {}
+  constructor(private permitService: PermitService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isOfficer = this.authService.isOfficer();
+    this.isCitizen = this.authService.isCitizen();
     this.loadData();
     this.searchControl.valueChanges.subscribe(val => {
       this.dataSource.filter = (val || '').trim().toLowerCase();
@@ -49,7 +61,7 @@ export class PermitListComponent implements OnInit {
     this.loading = true;
     this.permitService.getAll().subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+        this.dataSource.data = Array.isArray(data) ? data : (data as any).data || [];
         setTimeout(() => {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;

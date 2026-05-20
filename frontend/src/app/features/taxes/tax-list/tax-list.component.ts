@@ -14,6 +14,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { TaxService } from '../../../core/services/tax.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Tax } from '../../../core/models/tax.model';
 
 @Component({
@@ -33,14 +34,25 @@ export class TaxListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns = ['taxpayer_name', 'taxpayer_id', 'tax_type', 'amount', 'due_date', 'period', 'status', 'actions'];
+  isOfficer = false;
+  isCitizen = false;
+
+  officerColumns = ['taxpayer_name', 'taxpayer_id', 'tax_type', 'amount', 'due_date', 'period', 'status', 'actions'];
+  citizenColumns = ['tax_type', 'amount', 'due_date', 'period', 'status', 'actions'];
+
+  get displayedColumns() {
+    return this.isCitizen ? this.citizenColumns : this.officerColumns;
+  }
+
   dataSource = new MatTableDataSource<Tax>([]);
   searchControl = new FormControl('');
   loading = true;
 
-  constructor(private taxService: TaxService) {}
+  constructor(private taxService: TaxService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isOfficer = this.authService.isOfficer();
+    this.isCitizen = this.authService.isCitizen();
     this.loadData();
     this.searchControl.valueChanges.subscribe(val => {
       this.dataSource.filter = (val || '').trim().toLowerCase();
@@ -51,7 +63,7 @@ export class TaxListComponent implements OnInit {
     this.loading = true;
     this.taxService.getAll().subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+        this.dataSource.data = Array.isArray(data) ? data : (data as any).data || [];
         setTimeout(() => {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;

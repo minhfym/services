@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { GrantService } from '../../../core/services/grant.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Grant } from '../../../core/models/grant.model';
 
 @Component({
@@ -31,14 +32,25 @@ export class GrantListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns = ['title', 'grant_type', 'total_amount', 'available_amount', 'deadline', 'status', 'actions'];
+  isOfficer = false;
+  isCitizen = false;
+
+  officerColumns = ['title', 'grant_type', 'total_amount', 'available_amount', 'deadline', 'status', 'actions'];
+  citizenColumns = ['title', 'grant_type', 'available_amount', 'deadline', 'status', 'actions'];
+
+  get displayedColumns() {
+    return this.isCitizen ? this.citizenColumns : this.officerColumns;
+  }
+
   dataSource = new MatTableDataSource<Grant>([]);
   searchControl = new FormControl('');
   loading = true;
 
-  constructor(private grantService: GrantService) {}
+  constructor(private grantService: GrantService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isOfficer = this.authService.isOfficer();
+    this.isCitizen = this.authService.isCitizen();
     this.loadData();
     this.searchControl.valueChanges.subscribe(val => {
       this.dataSource.filter = (val || '').trim().toLowerCase();
@@ -49,7 +61,7 @@ export class GrantListComponent implements OnInit {
     this.loading = true;
     this.grantService.getAll().subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+        this.dataSource.data = Array.isArray(data) ? data : (data as any).data || [];
         setTimeout(() => {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;

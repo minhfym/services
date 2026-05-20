@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { RegistrationService } from '../../../core/services/registration.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Registration } from '../../../core/models/registration.model';
 
 @Component({
@@ -31,14 +32,25 @@ export class RegistrationListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  displayedColumns = ['registration_number', 'full_name', 'national_id', 'registration_type', 'district', 'submitted_at', 'status', 'actions'];
+  isOfficer = false;
+  isCitizen = false;
+
+  officerColumns = ['registration_number', 'full_name', 'national_id', 'registration_type', 'submitted_at', 'status', 'actions'];
+  citizenColumns = ['registration_number', 'registration_type', 'status', 'submitted_at', 'actions'];
+
+  get displayedColumns() {
+    return this.isCitizen ? this.citizenColumns : this.officerColumns;
+  }
+
   dataSource = new MatTableDataSource<Registration>([]);
   searchControl = new FormControl('');
   loading = true;
 
-  constructor(private registrationService: RegistrationService) {}
+  constructor(private registrationService: RegistrationService, private authService: AuthService) {}
 
   ngOnInit(): void {
+    this.isOfficer = this.authService.isOfficer();
+    this.isCitizen = this.authService.isCitizen();
     this.loadData();
     this.searchControl.valueChanges.subscribe(val => {
       this.dataSource.filter = (val || '').trim().toLowerCase();
@@ -49,7 +61,7 @@ export class RegistrationListComponent implements OnInit {
     this.loading = true;
     this.registrationService.getAll().subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+        this.dataSource.data = Array.isArray(data) ? data : (data as any).data || [];
         setTimeout(() => {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
