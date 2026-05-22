@@ -1,46 +1,50 @@
 #!/bin/bash
-echo "Starting all Government Portal MFE services..."
-echo ""
+# Government Services Portal — start all micro-frontends
+#
+# Usage:
+#   bash start-all.sh           # development (hot reload, single portal at :4200)
+#   bash start-all.sh --prod    # build all then serve production bundle at :4200
 
-echo "Starting Shell (port 4200)..."
-cd /home/user/services/micro-frontend/shell && npm start -- --port=4200 &
-SHELL_PID=$!
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
 
-echo "Starting Tax MFE (port 4201)..."
-cd /home/user/services/micro-frontend/mfe-taxes && npm start -- --port=4201 &
-TAXES_PID=$!
-
-echo "Starting Permits MFE (port 4202)..."
-cd /home/user/services/micro-frontend/mfe-permits && npm start -- --port=4202 &
-PERMITS_PID=$!
-
-echo "Starting Lands MFE (port 4203)..."
-cd /home/user/services/micro-frontend/mfe-lands && npm start -- --port=4203 &
-LANDS_PID=$!
-
-echo "Starting Grants MFE (port 4204)..."
-cd /home/user/services/micro-frontend/mfe-grants && npm start -- --port=4204 &
-GRANTS_PID=$!
-
-echo "Starting Cases MFE (port 4205)..."
-cd /home/user/services/micro-frontend/mfe-cases && npm start -- --port=4205 &
-CASES_PID=$!
-
-echo "Starting Registrations MFE (port 4206)..."
-cd /home/user/services/micro-frontend/mfe-registrations && npm start -- --port=4206 &
-REGISTRATIONS_PID=$!
+if [[ "$1" == "--prod" ]]; then
+  echo "Building all MFEs and shell for production..."
+  npm run build
+  echo ""
+  echo "Starting unified portal server at http://localhost:4200 ..."
+  npm run serve
+  exit 0
+fi
 
 echo ""
-echo "All services starting:"
-echo "  Shell:         http://localhost:4200"
-echo "  Taxes MFE:     http://localhost:4201"
-echo "  Permits MFE:   http://localhost:4202"
-echo "  Lands MFE:     http://localhost:4203"
-echo "  Grants MFE:    http://localhost:4204"
-echo "  Cases MFE:     http://localhost:4205"
-echo "  Registrations: http://localhost:4206"
+echo "  Government Services Portal — Micro Frontend Architecture"
+echo "  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "  Single portal URL:  http://localhost:4200  (navigate here only)"
 echo ""
-echo "Press Ctrl+C to stop all services"
+echo "  Each MFE runs on its own port but is proxied transparently:"
+echo "  /mfe/taxes         → :4201   Tax Collection"
+echo "  /mfe/permits       → :4202   E-Permits"
+echo "  /mfe/lands         → :4203   Land Administration"
+echo "  /mfe/grants        → :4204   Grants"
+echo "  /mfe/cases         → :4205   Law Cases"
+echo "  /mfe/registrations → :4206   Registrations"
+echo ""
+echo "  Credentials: admin@gov.portal | officer@gov.portal | citizen@gov.portal"
+echo "  Password: password"
+echo ""
+echo "  Starting all services (this may take ~30 seconds)..."
+echo ""
 
-trap "kill $SHELL_PID $TAXES_PID $PERMITS_PID $LANDS_PID $GRANTS_PID $CASES_PID $REGISTRATIONS_PID 2>/dev/null; exit" SIGINT SIGTERM
-wait
+# Use concurrently from root workspace
+npx concurrently \
+  --kill-others-on-fail \
+  --names "SHELL,TAXES,PERMITS,LANDS,GRANTS,CASES,REGS" \
+  --prefix-colors "blue.bold,cyan,green,yellow,magenta,red,white" \
+  "cd shell         && npm start -- --port=4200 --disable-host-check" \
+  "cd mfe-taxes     && npm start -- --port=4201 --disable-host-check" \
+  "cd mfe-permits   && npm start -- --port=4202 --disable-host-check" \
+  "cd mfe-lands     && npm start -- --port=4203 --disable-host-check" \
+  "cd mfe-grants    && npm start -- --port=4204 --disable-host-check" \
+  "cd mfe-cases     && npm start -- --port=4205 --disable-host-check" \
+  "cd mfe-registrations && npm start -- --port=4206 --disable-host-check"

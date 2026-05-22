@@ -52,7 +52,8 @@
                 }
               ],
               "outputHashing": "all",
-              "extraWebpackConfig": "webpack.prod.config.js"
+              "extraWebpackConfig": "webpack.prod.config.js",
+              "baseHref": "/mfe/registrations/"
             },
             "development": {
               "optimization": false,

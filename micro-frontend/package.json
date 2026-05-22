@@ -1,0 +1,32 @@
+{
+  "name": "gov-portal-micro-frontends",
+  "version": "1.0.0",
+  "description": "Government Services Portal - Micro Frontend Workspace",
+  "scripts": {
+    "dev": "concurrently --kill-others-on-fail --names \"SHELL,TAXES,PERMITS,LANDS,GRANTS,CASES,REGS\" --prefix-colors \"blue,cyan,green,yellow,magenta,red,white\" \"npm run dev:shell\" \"npm run dev:taxes\" \"npm run dev:permits\" \"npm run dev:lands\" \"npm run dev:grants\" \"npm run dev:cases\" \"npm run dev:registrations\"",
+    "dev:shell":         "cd shell         && npm start -- --port=4200 --disable-host-check",
+    "dev:taxes":         "cd mfe-taxes     && npm start -- --port=4201 --disable-host-check",
+    "dev:permits":       "cd mfe-permits   && npm start -- --port=4202 --disable-host-check",
+    "dev:lands":         "cd mfe-lands     && npm start -- --port=4203 --disable-host-check",
+    "dev:grants":        "cd mfe-grants    && npm start -- --port=4204 --disable-host-check",
+    "dev:cases":         "cd mfe-cases     && npm start -- --port=4205 --disable-host-check",
+    "dev:registrations": "cd mfe-registrations && npm start -- --port=4206 --disable-host-check",
+    "build": "npm run build:mfes && npm run build:shell",
+    "build:mfes": "concurrently --names \"TAXES,PERMITS,LANDS,GRANTS,CASES,REGS\" \"npm run build:taxes\" \"npm run build:permits\" \"npm run build:lands\" \"npm run build:grants\" \"npm run build:cases\" \"npm run build:registrations\"",
+    "build:shell":         "cd shell         && npm run build -- --configuration=production",
+    "build:taxes":         "cd mfe-taxes     && npm run build -- --configuration=production",
+    "build:permits":       "cd mfe-permits   && npm run build -- --configuration=production",
+    "build:lands":         "cd mfe-lands     && npm run build -- --configuration=production",
+    "build:grants":        "cd mfe-grants    && npm run build -- --configuration=production",
+    "build:cases":         "cd mfe-cases     && npm run build -- --configuration=production",
+    "build:registrations": "cd mfe-registrations && npm run build -- --configuration=production",
+    "serve": "node portal-server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "express": "^5.2.1"
+  }
+}

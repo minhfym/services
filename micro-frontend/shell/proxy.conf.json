@@ -1,0 +1,44 @@
+{
+  "/mfe/taxes": {
+    "target": "http://localhost:4201",
+    "secure": false,
+    "pathRewrite": { "^/mfe/taxes": "" },
+    "changeOrigin": true,
+    "logLevel": "warn"
+  },
+  "/mfe/permits": {
+    "target": "http://localhost:4202",
+    "secure": false,
+    "pathRewrite": { "^/mfe/permits": "" },
+    "changeOrigin": true,
+    "logLevel": "warn"
+  },
+  "/mfe/lands": {
+    "target": "http://localhost:4203",
+    "secure": false,
+    "pathRewrite": { "^/mfe/lands": "" },
+    "changeOrigin": true,
+    "logLevel": "warn"
+  },
+  "/mfe/grants": {
+    "target": "http://localhost:4204",
+    "secure": false,
+    "pathRewrite": { "^/mfe/grants": "" },
+    "changeOrigin": true,
+    "logLevel": "warn"
+  },
+  "/mfe/cases": {
+    "target": "http://localhost:4205",
+    "secure": false,
+    "pathRewrite": { "^/mfe/cases": "" },
+    "changeOrigin": true,
+    "logLevel": "warn"
+  },
+  "/mfe/registrations": {
+    "target": "http://localhost:4206",
+    "secure": false,
+    "pathRewrite": { "^/mfe/registrations": "" },
+    "changeOrigin": true,
+    "logLevel": "warn"
+  }
+}

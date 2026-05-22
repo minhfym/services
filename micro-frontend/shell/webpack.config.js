@@ -1,15 +1,16 @@
 const { shareAll, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
 
+// In dev mode, MFEs are proxied through the shell dev server via proxy.conf.json.
+// All remotes resolve from the same origin (localhost:4200/mfe/<name>/).
 module.exports = withModuleFederationPlugin({
   remotes: {
-    "mfeTaxes": "http://localhost:4201/remoteEntry.js",
-    "mfePermits": "http://localhost:4202/remoteEntry.js",
-    "mfeLands": "http://localhost:4203/remoteEntry.js",
-    "mfeGrants": "http://localhost:4204/remoteEntry.js",
-    "mfeCases": "http://localhost:4205/remoteEntry.js",
-    "mfeRegistrations": "http://localhost:4206/remoteEntry.js",
+    "mfeTaxes":         "mfeTaxes@/mfe/taxes/remoteEntry.js",
+    "mfePermits":       "mfePermits@/mfe/permits/remoteEntry.js",
+    "mfeLands":         "mfeLands@/mfe/lands/remoteEntry.js",
+    "mfeGrants":        "mfeGrants@/mfe/grants/remoteEntry.js",
+    "mfeCases":         "mfeCases@/mfe/cases/remoteEntry.js",
+    "mfeRegistrations": "mfeRegistrations@/mfe/registrations/remoteEntry.js",
   },
-
   shared: {
     ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
   },
