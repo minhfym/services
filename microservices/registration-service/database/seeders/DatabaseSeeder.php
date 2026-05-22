@@ -2,24 +2,133 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\CitizenRegistration;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $registrations = [
+            [
+                'registration_number' => 'REG-2024-00001',
+                'first_name' => 'James',
+                'last_name' => 'Osei',
+                'date_of_birth' => '1985-06-15',
+                'gender' => 'male',
+                'national_id' => 'GHA-NID-001-85',
+                'passport_number' => 'GHA-PP-001-2020',
+                'nationality' => 'Ghanaian',
+                'marital_status' => 'married',
+                'address' => '45 Accra Road, East Legon',
+                'city' => 'Accra',
+                'region' => 'Greater Accra',
+                'phone' => '+233-24-000-0001',
+                'email' => 'james.osei@email.com',
+                'emergency_contact_name' => 'Mary Osei',
+                'emergency_contact_phone' => '+233-24-000-0002',
+                'registration_type' => 'citizenship',
+                'status' => 'approved',
+                'user_id' => 3,
+                'verified_by' => 2,
+                'verified_at' => '2024-02-20 10:00:00',
+            ],
+            [
+                'registration_number' => 'REG-2024-00002',
+                'first_name' => 'Fatima',
+                'last_name' => 'Al-Hassan',
+                'date_of_birth' => '2024-03-10',
+                'gender' => 'female',
+                'national_id' => 'GHA-NID-002-24',
+                'passport_number' => null,
+                'nationality' => 'Ghanaian',
+                'marital_status' => 'single',
+                'address' => '12 Northern Road, Tamale',
+                'city' => 'Tamale',
+                'region' => 'Northern Region',
+                'phone' => '+233-20-000-0003',
+                'email' => null,
+                'emergency_contact_name' => 'Ibrahim Al-Hassan',
+                'emergency_contact_phone' => '+233-20-000-0004',
+                'registration_type' => 'birth',
+                'status' => 'verified',
+                'user_id' => 3,
+                'verified_by' => 2,
+                'verified_at' => '2024-04-05 14:30:00',
+            ],
+            [
+                'registration_number' => 'REG-2024-00003',
+                'first_name' => 'Kofi',
+                'last_name' => 'Mensah',
+                'date_of_birth' => '1978-11-25',
+                'gender' => 'male',
+                'national_id' => 'GHA-NID-003-78',
+                'passport_number' => 'GHA-PP-003-2022',
+                'nationality' => 'Ghanaian',
+                'marital_status' => 'divorced',
+                'address' => '88 Kumasi Central Road',
+                'city' => 'Kumasi',
+                'region' => 'Ashanti Region',
+                'phone' => '+233-26-000-0005',
+                'email' => 'kofi.mensah@gmail.com',
+                'emergency_contact_name' => 'Ama Mensah',
+                'emergency_contact_phone' => '+233-26-000-0006',
+                'registration_type' => 'divorce',
+                'status' => 'pending',
+                'user_id' => 3,
+                'verified_by' => null,
+                'verified_at' => null,
+            ],
+            [
+                'registration_number' => 'REG-2024-00004',
+                'first_name' => 'Grace',
+                'last_name' => 'Owusu',
+                'date_of_birth' => '1992-08-30',
+                'gender' => 'female',
+                'national_id' => 'GHA-NID-004-92',
+                'passport_number' => null,
+                'nationality' => 'Ghanaian',
+                'marital_status' => 'married',
+                'address' => '33 Takoradi Harbor View',
+                'city' => 'Takoradi',
+                'region' => 'Western Region',
+                'phone' => '+233-31-000-0007',
+                'email' => 'grace.owusu@yahoo.com',
+                'emergency_contact_name' => 'Samuel Owusu',
+                'emergency_contact_phone' => '+233-31-000-0008',
+                'registration_type' => 'marriage',
+                'status' => 'pending',
+                'user_id' => 3,
+                'verified_by' => null,
+                'verified_at' => null,
+            ],
+            [
+                'registration_number' => 'REG-2024-00005',
+                'first_name' => 'Emmanuel',
+                'last_name' => 'Asante',
+                'date_of_birth' => '1955-04-12',
+                'gender' => 'male',
+                'national_id' => 'GHA-NID-005-55',
+                'passport_number' => 'GHA-PP-005-2018',
+                'nationality' => 'Ghanaian',
+                'marital_status' => 'widowed',
+                'address' => '7 Cape Coast Old Town',
+                'city' => 'Cape Coast',
+                'region' => 'Central Region',
+                'phone' => '+233-33-000-0009',
+                'email' => null,
+                'emergency_contact_name' => 'Yaw Asante',
+                'emergency_contact_phone' => '+233-33-000-0010',
+                'registration_type' => 'death',
+                'status' => 'approved',
+                'user_id' => 2,
+                'verified_by' => 2,
+                'verified_at' => '2024-05-01 09:00:00',
+            ],
+        ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        foreach ($registrations as $registration) {
+            CitizenRegistration::create($registration);
+        }
     }
 }

@@ -2,24 +2,158 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\TaxRecord;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $records = [
+            [
+                'user_id' => 1,
+                'tax_number' => 'TAX-2024-0001',
+                'taxpayer_name' => 'John Citizen',
+                'taxpayer_id' => 'NID-001-2024',
+                'tax_type' => 'income',
+                'amount_due' => 5000.00,
+                'amount_paid' => 5000.00,
+                'due_date' => '2024-03-31',
+                'payment_date' => '2024-03-15',
+                'status' => 'paid',
+                'financial_year' => '2023-2024',
+                'notes' => 'Annual income tax - paid in full',
+            ],
+            [
+                'user_id' => 2,
+                'tax_number' => 'TAX-2024-0002',
+                'taxpayer_name' => 'ABC Business Ltd',
+                'taxpayer_id' => 'BUS-002-2024',
+                'tax_type' => 'business',
+                'amount_due' => 25000.00,
+                'amount_paid' => 12500.00,
+                'due_date' => '2024-06-30',
+                'payment_date' => '2024-05-20',
+                'status' => 'partial',
+                'financial_year' => '2023-2024',
+                'notes' => 'Business tax - partial payment received',
+            ],
+            [
+                'user_id' => 3,
+                'tax_number' => 'TAX-2024-0003',
+                'taxpayer_name' => 'Mary Property Owner',
+                'taxpayer_id' => 'NID-003-2024',
+                'tax_type' => 'property',
+                'amount_due' => 3500.00,
+                'amount_paid' => 0.00,
+                'due_date' => '2024-01-31',
+                'payment_date' => null,
+                'status' => 'overdue',
+                'financial_year' => '2023-2024',
+                'notes' => 'Property tax overdue',
+            ],
+            [
+                'user_id' => 1,
+                'tax_number' => 'TAX-2024-0004',
+                'taxpayer_name' => 'John Citizen',
+                'taxpayer_id' => 'NID-001-2024',
+                'tax_type' => 'vat',
+                'amount_due' => 1200.00,
+                'amount_paid' => 0.00,
+                'due_date' => '2024-12-31',
+                'payment_date' => null,
+                'status' => 'pending',
+                'financial_year' => '2024-2025',
+                'notes' => 'VAT quarterly return',
+            ],
+            [
+                'user_id' => 4,
+                'tax_number' => 'TAX-2024-0005',
+                'taxpayer_name' => 'Import Export Co',
+                'taxpayer_id' => 'BUS-005-2024',
+                'tax_type' => 'customs',
+                'amount_due' => 8750.00,
+                'amount_paid' => 8750.00,
+                'due_date' => '2024-04-15',
+                'payment_date' => '2024-04-10',
+                'status' => 'paid',
+                'financial_year' => '2023-2024',
+                'notes' => 'Customs duty on imported goods',
+            ],
+            [
+                'user_id' => 5,
+                'tax_number' => 'TAX-2024-0006',
+                'taxpayer_name' => 'Green Farms Ltd',
+                'taxpayer_id' => 'BUS-006-2024',
+                'tax_type' => 'business',
+                'amount_due' => 4200.00,
+                'amount_paid' => 0.00,
+                'due_date' => '2024-09-30',
+                'payment_date' => null,
+                'status' => 'pending',
+                'financial_year' => '2024-2025',
+                'notes' => 'Agricultural business tax',
+            ],
+            [
+                'user_id' => 2,
+                'tax_number' => 'TAX-2024-0007',
+                'taxpayer_name' => 'ABC Business Ltd',
+                'taxpayer_id' => 'BUS-002-2024',
+                'tax_type' => 'vat',
+                'amount_due' => 15000.00,
+                'amount_paid' => 15000.00,
+                'due_date' => '2024-03-31',
+                'payment_date' => '2024-03-28',
+                'status' => 'paid',
+                'financial_year' => '2023-2024',
+                'notes' => 'VAT annual return',
+            ],
+            [
+                'user_id' => 6,
+                'tax_number' => 'TAX-2024-0008',
+                'taxpayer_name' => 'City Center Mall',
+                'taxpayer_id' => 'BUS-008-2024',
+                'tax_type' => 'property',
+                'amount_due' => 45000.00,
+                'amount_paid' => 0.00,
+                'due_date' => '2024-02-28',
+                'payment_date' => null,
+                'status' => 'overdue',
+                'financial_year' => '2023-2024',
+                'notes' => 'Commercial property tax overdue',
+            ],
+            [
+                'user_id' => 7,
+                'tax_number' => 'TAX-2024-0009',
+                'taxpayer_name' => 'Tech Solutions Inc',
+                'taxpayer_id' => 'BUS-009-2024',
+                'tax_type' => 'income',
+                'amount_due' => 32000.00,
+                'amount_paid' => 32000.00,
+                'due_date' => '2024-04-30',
+                'payment_date' => '2024-04-25',
+                'status' => 'paid',
+                'financial_year' => '2023-2024',
+                'notes' => 'Corporate income tax',
+            ],
+            [
+                'user_id' => 3,
+                'tax_number' => 'TAX-2024-0010',
+                'taxpayer_name' => 'Mary Property Owner',
+                'taxpayer_id' => 'NID-003-2024',
+                'tax_type' => 'income',
+                'amount_due' => 2800.00,
+                'amount_paid' => 1400.00,
+                'due_date' => '2024-06-30',
+                'payment_date' => '2024-05-01',
+                'status' => 'partial',
+                'financial_year' => '2024-2025',
+                'notes' => 'Income tax - installment plan',
+            ],
+        ];
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        foreach ($records as $record) {
+            TaxRecord::create($record);
+        }
     }
 }
