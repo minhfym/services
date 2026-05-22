@@ -20,6 +20,7 @@
         "build": {
           "builder": "ngx-build-plus:browser",
           "options": {
+            "index": "src/index.html",
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [

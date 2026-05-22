@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -136,6 +136,12 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
   `]
 })
 export class TaxFormComponent implements OnInit {
+  private fb = inject(FormBuilder);
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private snackBar = inject(MatSnackBar);
+
   form = this.fb.group({
     taxpayer_name: ['', Validators.required],
     taxpayer_email: ['', Validators.email],
@@ -149,14 +155,6 @@ export class TaxFormComponent implements OnInit {
   loading = false;
   error = '';
   editId: string | null = null;
-
-  constructor(
-    private fb: FormBuilder,
-    private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute,
-    private snackBar: MatSnackBar
-  ) {}
 
   ngOnInit(): void {
     this.editId = this.route.snapshot.paramMap.get('id');

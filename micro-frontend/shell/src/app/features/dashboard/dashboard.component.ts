@@ -25,7 +25,7 @@ interface StatCard {
     <div class="dashboard">
       <div class="welcome-banner">
         <div class="welcome-text">
-          <h2>Welcome back, {{ currentUser?.name?.split(' ')[0] }}!</h2>
+          <h2>Welcome back, {{ (currentUser?.name || '').split(' ')[0] || 'User' }}!</h2>
           <p>{{ getWelcomeSubtitle() }}</p>
         </div>
         <div class="welcome-date">
