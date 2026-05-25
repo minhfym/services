@@ -29,10 +29,10 @@ import { AuthService } from '../../../core/services/auth.service';
 
       <mat-card class="register-card">
         <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
-        <mat-card-header>
-          <mat-card-title>Create Account</mat-card-title>
-          <mat-card-subtitle>Fill in your details to register</mat-card-subtitle>
-        </mat-card-header>
+        <div class="card-header">
+          <h2 class="card-title">Create Account</h2>
+          <p class="card-subtitle">Fill in your details to register</p>
+        </div>
         <mat-card-content>
           <form [formGroup]="form" (ngSubmit)="submit()">
             <mat-form-field appearance="outline" class="full-width">
@@ -115,7 +115,9 @@ import { AuthService } from '../../../core/services/auth.service';
       max-width: 460px;
       border-radius: 16px !important;
       box-shadow: 0 24px 48px rgba(0,0,0,0.3) !important;
-      mat-card-header { padding: 20px 24px 0; }
+      .card-header { padding: 20px 24px 0; }
+      .card-title { font-size: 22px; font-weight: 700; color: #1a237e; margin: 0 0 4px; }
+      .card-subtitle { font-size: 13px; color: #757575; margin: 0; }
       mat-card-content { padding: 16px 24px; }
       mat-card-actions { padding: 0 24px 16px; margin: 0; }
     }

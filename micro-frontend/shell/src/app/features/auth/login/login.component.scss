@@ -42,17 +42,21 @@
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.3) !important;
   overflow: hidden;
 
-  mat-card-header {
+  .card-header {
     padding: 24px 24px 0;
 
-    mat-card-title {
+    .card-title {
       font-size: 22px;
       font-weight: 700;
       color: #1a237e;
-      margin-bottom: 4px;
+      margin: 0 0 4px;
     }
 
-    mat-card-subtitle { font-size: 13px; }
+    .card-subtitle {
+      font-size: 13px;
+      color: #757575;
+      margin: 0;
+    }
   }
 
   mat-card-content { padding: 20px 24px; }
