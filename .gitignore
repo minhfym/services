@@ -5,6 +5,10 @@ dist/
 *.sqlite-shm
 *.sqlite-wal
 vendor/
+# Keep the shim that redirects each service to shared-vendor
+!microservices/*/vendor/
+!microservices/*/vendor/autoload.php
+microservices/shared-vendor/
 storage/logs/*.log
 storage/framework/cache/
 storage/framework/sessions/
