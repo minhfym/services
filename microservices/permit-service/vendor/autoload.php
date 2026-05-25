@@ -1,23 +1,22 @@
 <?php
-// Shared-vendor shim: one vendor folder for all 8 microservices.
-// Load shared vendor first (registers itself with prepend=true),
-// then prepend our App\ handler so it sits in front of the classmap.
+// Shared-vendor shim.
+// ob_start() captures any notices/warnings emitted during autoloader setup
+// so nothing leaks to stdout before Laravel can send HTTP headers.
+ob_start();
 
 $serviceRoot = dirname(__DIR__);
 $sharedVendor = dirname($serviceRoot) . '/shared-vendor';
 
 $loader = require $sharedVendor . '/autoload.php';
 
-// prepend=true ensures we run before Composer's classmap lookup
-@spl_autoload_register(function (string $class) use ($serviceRoot): bool {
-    static $map = null;
-    if ($map === null) {
-        $map = [
-            'App\\'                 => '/app/',
-            'Database\\Factories\\' => '/database/factories/',
-            'Database\\Seeders\\'   => '/database/seeders/',
-        ];
-    }
+// Prepend our handler so it runs before Composer's classmap,
+// which has stale App\ paths pointing to the wrong service directory.
+spl_autoload_register(function (string $class) use ($serviceRoot): bool {
+    static $map = [
+        'App\\'                 => '/app/',
+        'Database\\Factories\\' => '/database/factories/',
+        'Database\\Seeders\\'   => '/database/seeders/',
+    ];
     foreach ($map as $prefix => $rel) {
         if (strncmp($prefix, $class, $len = strlen($prefix)) !== 0) {
             continue;
@@ -29,6 +28,8 @@ $loader = require $sharedVendor . '/autoload.php';
         }
     }
     return false;
-}, true, true);
+}, true, true); // prepend=true → runs before Composer classmap
+
+ob_end_clean(); // discard any bootstrap output before headers are sent
 
 return $loader;
