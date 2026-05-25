@@ -6,6 +6,13 @@
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Auto-setup shared vendor if missing (first run after clone)
+if [ ! -d "$BASE_DIR/shared-vendor" ]; then
+    echo "shared-vendor/ not found — running first-time setup..."
+    bash "$BASE_DIR/setup.sh"
+    echo ""
+fi
+
 # Track background PIDs for cleanup
 PIDS=()
 
