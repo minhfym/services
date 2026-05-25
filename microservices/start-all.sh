@@ -1,57 +1,75 @@
 #!/bin/bash
 
 # Government Services Portal - Start All Microservices
-echo "Starting all microservices..."
+# All background services are started first; gateway runs in the foreground
+# so the terminal stays open. Ctrl+C kills everything cleanly.
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+# Track background PIDs for cleanup
+PIDS=()
+
+cleanup() {
+    echo ""
+    echo "Stopping all microservices..."
+    for pid in "${PIDS[@]}"; do
+        kill "$pid" 2>/dev/null
+    done
+    wait 2>/dev/null
+    echo "All services stopped."
+    exit 0
+}
+trap cleanup SIGINT SIGTERM
+
 # Kill any existing instances on these ports
 for port in 8000 8001 8002 8003 8004 8005 8006 8007; do
-    pid=$(lsof -ti:$port 2>/dev/null)
-    if [ -n "$pid" ]; then
-        echo "Stopping existing process on port $port (PID: $pid)"
-        kill $pid 2>/dev/null
-    fi
+    pid=$(lsof -ti:"$port" 2>/dev/null)
+    [ -n "$pid" ] && kill "$pid" 2>/dev/null
 done
-
 sleep 1
 
-start_service() {
-    local name=$1
-    local dir=$2
-    local port=$3
-    local log="/tmp/${name}.log"
-    echo "Starting ${name} on port ${port}..."
-    (cd "$dir" && php artisan serve --port="$port") > "$log" 2>&1 &
-    echo $!
-}
+echo ""
+echo "  Government Services Portal — Microservices Backend"
+echo "  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-start_service "auth-service"         "$BASE_DIR/auth-service"         8001
-start_service "tax-service"          "$BASE_DIR/tax-service"          8002
-start_service "permit-service"       "$BASE_DIR/permit-service"       8003
-start_service "land-service"         "$BASE_DIR/land-service"         8004
-start_service "grant-service"        "$BASE_DIR/grant-service"        8005
-start_service "case-service"         "$BASE_DIR/case-service"         8006
-start_service "registration-service" "$BASE_DIR/registration-service" 8007
-start_service "gateway"              "$BASE_DIR/gateway"              8000
+# Start background services (auth through registration)
+declare -A SERVICES=(
+    [auth-service]=8001
+    [tax-service]=8002
+    [permit-service]=8003
+    [land-service]=8004
+    [grant-service]=8005
+    [case-service]=8006
+    [registration-service]=8007
+)
+
+for svc in auth-service tax-service permit-service land-service grant-service case-service registration-service; do
+    port="${SERVICES[$svc]}"
+    log="/tmp/${svc}.log"
+    echo "  Starting ${svc} on :${port}..."
+    (cd "$BASE_DIR/$svc" && php artisan serve --port="$port" >> "$log" 2>&1) &
+    PIDS+=($!)
+done
 
 echo ""
-echo "All services started! Waiting for them to be ready..."
+echo "  Waiting for services to be ready..."
 sleep 3
-echo ""
-echo "Service endpoints:"
-echo "  Gateway:              http://localhost:8000/api"
-echo "  Auth Service:         http://localhost:8001/api"
-echo "  Tax Service:          http://localhost:8002/api"
-echo "  Permit Service:       http://localhost:8003/api"
-echo "  Land Service:         http://localhost:8004/api"
-echo "  Grant Service:        http://localhost:8005/api"
-echo "  Case Service:         http://localhost:8006/api"
-echo "  Registration Service: http://localhost:8007/api"
-echo ""
-echo "Test: curl -s http://localhost:8000/api/health"
-echo "Logs: /tmp/<service-name>.log"
-echo ""
-echo "Press Ctrl+C to stop all services."
 
-wait
+echo ""
+echo "  Endpoints:"
+echo "    Gateway (all-in-one):   http://localhost:8000/api"
+echo "    Auth:                   http://localhost:8001/api/auth/login"
+echo "    Taxes:                  http://localhost:8002/api/taxes"
+echo "    Permits:                http://localhost:8003/api/permits"
+echo "    Lands:                  http://localhost:8004/api/lands"
+echo "    Grants:                 http://localhost:8005/api/grants"
+echo "    Cases:                  http://localhost:8006/api/cases"
+echo "    Registrations:          http://localhost:8007/api/registrations"
+echo ""
+echo "  Logs: /tmp/<service-name>.log"
+echo ""
+echo "  Starting gateway on :8000 (Ctrl+C to stop everything)..."
+echo ""
+
+# Run the gateway in the FOREGROUND — keeps the terminal open
+cd "$BASE_DIR/gateway" && php artisan serve --port=8000
