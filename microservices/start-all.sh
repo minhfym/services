@@ -53,10 +53,17 @@ declare -A SERVICES=(
 for svc in auth-service tax-service permit-service land-service grant-service case-service registration-service; do
     port="${SERVICES[$svc]}"
     log="/tmp/${svc}.log"
+    # Clear stale bootstrap cache (prevents "Class not found" on service provider changes)
+    rm -f "$BASE_DIR/$svc/bootstrap/cache/packages.php" \
+          "$BASE_DIR/$svc/bootstrap/cache/services.php" 2>/dev/null
     echo "  Starting ${svc} on :${port}..."
     (cd "$BASE_DIR/$svc" && php artisan serve --port="$port" >> "$log" 2>&1) &
     PIDS+=($!)
 done
+
+# Clear gateway bootstrap cache too
+rm -f "$BASE_DIR/gateway/bootstrap/cache/packages.php" \
+      "$BASE_DIR/gateway/bootstrap/cache/services.php" 2>/dev/null
 
 echo ""
 echo "  Waiting for services to be ready..."
